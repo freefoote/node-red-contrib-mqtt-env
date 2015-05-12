@@ -2,7 +2,7 @@
   "name": "node-red-contrib-mqtt-env",
   "version": "1.0.0",
   "description": "MQTT broker that can resolve environment variables",
-  "private": true,
+  "private": false,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
