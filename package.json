@@ -1,0 +1,29 @@
+{
+  "name": "node-red-contrib-mqtt-env",
+  "version": "1.0.0",
+  "description": "MQTT broker that can resolve environment variables",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "mqtt": "0.3.x",
+    "is-utf8": "0.2.0"
+  },
+  "repository" : {
+        "type":"git",
+        "url":"https://github.com/AlexWollert/node-red-contrib-mqtt-env"
+  },
+  "license": "MIT",
+  "keywords": [ "node-red", "mqtt" ],
+  "node-red"      : {
+        "nodes"     : {
+            "mqtt-env": "mqtt-env.js"
+        }
+  },
+  "author": {
+      "name": "ART+COM Studios",
+      "email": "alexander.wollert@artcom.de",
+      "url": "http://www.artcom.de"
+  }
+}
