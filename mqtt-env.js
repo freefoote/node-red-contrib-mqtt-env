@@ -14,6 +14,8 @@
  * limitations under the License.
  **/
 
+var url = require('url');
+
 module.exports = function(RED) {
     "use strict";
     var connectionPool = require("./lib/mqttConnectionPool");
@@ -23,15 +25,34 @@ module.exports = function(RED) {
     function MQTTBrokerNode(n) {
         RED.nodes.createNode(this,n);
         this.broker = n.broker;
+        var urlMode = false;
         if(process.env[this.broker]){
-            util.log('[mqtt] Resolving ENV: '+this.broker+' into '+process.env[this.broker]);
-            this.broker = process.env[this.broker];
+            var raw = process.env[this.broker];
+            if (raw.indexOf('://') != -1) {
+                // Crude: assume it's a full URL with all the credentials.
+                urlMode = true;
+                var parsed = url.parse(raw);
+                this.broker = parsed.hostname;
+		this.port = parsed.port;
+		if (parsed.auth.length > 0) {
+                    var auth = parsed.auth.split(':');
+                    this.username = auth[0];
+                    if (auth.length > 1) {
+                        this.password = auth[1];
+                    }
+                }
+            } else {
+                util.log('[mqtt] Resolving ENV: '+this.broker+' into '+process.env[this.broker]);
+                this.broker = process.env[this.broker];
+            }
         }
-        this.port = n.port;
-        this.clientid = n.clientid;
-        if (this.credentials) {
-            this.username = this.credentials.user;
-            this.password = this.credentials.password;
+        if (!urlMode) {
+            this.port = n.port;
+            this.clientid = n.clientid;
+            if (this.credentials) {
+                this.username = this.credentials.user;
+                this.password = this.credentials.password;
+            }
         }
     }
     RED.nodes.registerType("mqtt-env-broker",MQTTBrokerNode,{
